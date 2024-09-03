@@ -2,7 +2,8 @@
 resolver = "2"
 
 members =  [
-	"axdevice_base", "vgic",
+	"axdevice_base",
+	"vgic"
 ]
 
 [workspace.package]

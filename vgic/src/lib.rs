@@ -6,6 +6,11 @@ use axerrno::AxResult;
 
 mod devops_impl;
 
+mod gic_traits;
+
+pub use gic_traits::GicInterface;
+pub use gic_traits::GicTrait;
+
 const PPI_ID_MAX: usize = 32; /* 16...31 */
 const SPI_ID_MAX: usize = 512;
 const GICD_LR_NUM: usize = 4;
