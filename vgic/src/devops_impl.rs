@@ -33,7 +33,7 @@ impl BaseDeviceOps for Vgic {
     fn handle_write(&self, addr: GuestPhysAddr, width: usize, val: usize) {
         let addr = addr.as_usize() & 0xfff;
         match width {
-            0 => {
+            1 => {
                 self.handle_write8(addr, val);
             }
             2 => {
