@@ -2,7 +2,7 @@
 resolver = "2"
 
 members =  [
-	"axdevice_base",
+	"axdevice_base", "vgic",
 ]
 
 [workspace.package]
@@ -14,3 +14,4 @@ repository = ""
 
 [workspace.dependencies]
 axdevice_base = { path = "axdevice_base", version = "0.1"}
+vgic = { path = "vgic", version = "0.1"}
