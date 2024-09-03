@@ -14,3 +14,4 @@ axdevice_base = { git = "https://github.com/arceos-hypervisor/axdevice_crates.gi
 axaddrspace  = { git = "https://github.com/arceos-hypervisor/axaddrspace.git" }
 memory_addr = "0.3.0"
 axerrno = "0.1.0"
+crate_interface = "0.1.0"
