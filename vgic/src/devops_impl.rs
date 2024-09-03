@@ -18,13 +18,13 @@ impl BaseDeviceOps for Vgic {
     fn handle_read(&self, addr: GuestPhysAddr, width: usize) -> AxResult<usize> {
         let addr = addr.as_usize() & 0xfff;
         match width {
-            0 => {
+            1 => {
                 return self.handle_read8(addr);
             }
-            1 => {
+            2 => {
                 return self.handle_read16(addr);
             }
-            2 => {
+            4 => {
                 return self.handle_read32(addr);
             }
             _ => Ok(0),
@@ -36,10 +36,10 @@ impl BaseDeviceOps for Vgic {
             0 => {
                 self.handle_write8(addr, val);
             }
-            1 => {
+            2 => {
                 self.handle_write16(addr, val);
             }
-            2 => {
+            4 => {
                 self.handle_write32(addr, val);
             }
             _ => {}
