@@ -1,0 +1,19 @@
+[package]
+name = "vgic"
+edition = "2021"
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+axdevice_base = { path = "../axdevice_base" }
+axaddrspace  = { path = "../../axaddrspace" }
+memory_addr = "0.3.0"
+axerrno = "0.1.0"
+crate_interface = "0.1.0"
+log = "0.4"
+spin = "0.9"
