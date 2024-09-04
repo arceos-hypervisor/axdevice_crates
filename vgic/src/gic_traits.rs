@@ -1,6 +1,5 @@
 use crate_interface::call_interface;
 
-/// 通过crate_interface的方式来实现GicTrait的接口
 #[crate_interface::def_interface]
 pub trait GicTrait {
     fn set_enable(vector: usize, enable: bool);
@@ -22,7 +21,9 @@ pub trait GicTrait {
 
 pub struct GicInterface;
 
-#[allow(dead_code)]
+/// Implementation of [`GicTrait`] by crate_interface::call_interface,
+/// to provide an easy-to-use interface to
+/// the [vgic] crate.
 impl GicInterface {
     pub fn set_enable(vector: usize, enable: bool) {
         call_interface!(GicTrait::set_enable(vector, enable));
