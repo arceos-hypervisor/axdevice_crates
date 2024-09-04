@@ -34,32 +34,32 @@ impl GicInterface {
     pub fn get_typer() -> u32 {
         call_interface!(GicTrait::get_typer())
     }
-    fn get_iidr() -> u32 {
+    pub fn get_iidr() -> u32 {
         call_interface!(GicTrait::get_iidr())
     }
 
     pub fn set_state(int_id: usize, state: usize, current_cpu_id: usize) {
         call_interface!(GicTrait::set_state(int_id, state, current_cpu_id));
     }
-    fn get_state(int_id: usize) -> usize {
+    pub fn get_state(int_id: usize) -> usize {
         call_interface!(GicTrait::get_state(int_id))
     }
 
-    fn set_icfgr(int_id: usize, cfg: u8) {
+    pub fn set_icfgr(int_id: usize, cfg: u8) {
         call_interface!(GicTrait::set_icfgr(int_id, cfg));
     }
 
-    fn get_target_cpu(int_id: usize) -> usize {
+    pub fn get_target_cpu(int_id: usize) -> usize {
         call_interface!(GicTrait::get_target_cpu(int_id))
     }
-    fn set_target_cpu(int_id: usize, target: u8) {
+    pub fn set_target_cpu(int_id: usize, target: u8) {
         call_interface!(GicTrait::set_target_cpu(int_id, target));
     }
 
-    fn get_priority(int_id: usize) -> usize {
+    pub fn get_priority(int_id: usize) -> usize {
         call_interface!(GicTrait::get_priority(int_id))
     }
-    fn set_priority(int_id: usize, priority: u8) {
+    pub fn set_priority(int_id: usize, priority: u8) {
         call_interface!(GicTrait::set_priority(int_id, priority));
     }
 }
