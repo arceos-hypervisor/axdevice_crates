@@ -54,7 +54,7 @@ pub trait BaseDeviceOps<R: DeviceAddrRange, U: VCpuInfo> {
     /// Handles a read operation on the emulated device.
     fn handle_read(&self, addr: R::Addr, width: AccessWidth) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
-    fn handle_write(&self, addr: R::Addr, width: AccessWidth, val: usize);
+    fn handle_write(&self, addr: R::Addr, width: AccessWidth, val: usize) -> AxResult;
     /// Sets the interrupt injector for the emulated device.
     fn set_interrupt_injector(&mut self, injector: Box<InterruptInjector<U>>);
 }
