@@ -1,4 +1,7 @@
 #![no_std]
+#![feature(trait_alias)]
+#![allow(incomplete_features)]
+#![feature(generic_const_exprs)]
 
 //! This crate provides basic traits and structures for emulated devices of ArceOS hypervisor.
 //!
@@ -9,15 +12,17 @@
 
 extern crate alloc;
 
-use alloc::string::String;
-use alloc::vec::Vec;
-use axaddrspace::GuestPhysAddr;
+use alloc::{boxed::Box, string::String, vec::Vec};
+use axaddrspace::GuestPhysAddrRange;
 use axerrno::AxResult;
-use memory_addr::AddrRange;
+use cpumask::CpuMask;
 
+mod device_addr;
 // TODO: support vgicv2
 // pub(crate) mod emu_vgicdv2;
 mod emu_type;
+
+pub use device_addr::*;
 // pub use emu_config_notuse::EmulatedDeviceConfig;
 pub use emu_type::EmuDeviceType;
 
@@ -38,14 +43,35 @@ pub struct EmulatedDeviceConfig {
     pub cfg_list: Vec<usize>,
 }
 
+pub trait VCpuInfo {
+    fn get_current_vcpu_id() -> usize;
+}
+
 /// [`BaseDeviceOps`] is the trait that all emulated devices must implement.
-pub trait BaseDeviceOps {
+pub trait BaseDeviceOps<R: DeviceAddrRange, U: VCpuInfo> {
     /// Returns the type of the emulated device.
     fn emu_type(&self) -> EmuDeviceType;
     /// Returns the address range of the emulated device.
-    fn address_range(&self) -> AddrRange<GuestPhysAddr>;
+    fn address_range(&self) -> R;
     /// Handles a read operation on the emulated device.
-    fn handle_read(&self, addr: GuestPhysAddr, width: usize) -> AxResult<usize>;
+    fn handle_read(&self, addr: R::Addr, width: usize) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
-    fn handle_write(&self, addr: GuestPhysAddr, width: usize, val: usize);
+    fn handle_write(&self, addr: R::Addr, width: usize, val: usize);
+    /// Sets the interrupt injector for the emulated device.
+    fn set_interrupt_injector(&mut self, injector: Box<InterruptInjector<U>>);
 }
+
+// trait aliases are limited yet: https://github.com/rust-lang/rfcs/pull/3437
+/// [`BaseMmioDeviceOps`] is the trait that all emulated MMIO devices must implement.
+/// It is a trait alias of [`BaseDeviceOps`] with [`GuestPhysAddrRange`] as the address range.
+pub trait BaseMmioDeviceOps<U: VCpuInfo> = BaseDeviceOps<GuestPhysAddrRange, U>;
+/// [`BaseSysRegDeviceOps`] is the trait that all emulated system register devices must implement.
+/// It is a trait alias of [`BaseDeviceOps`] with [`SysRegAddrRange`] as the address range.
+pub trait BaseSysRegDeviceOps<U: VCpuInfo> = BaseDeviceOps<SysRegAddrRange, U>;
+
+/// The maximum number of vCPUs supported.
+pub const MAX_VCPU_NUM: usize = 64;
+
+/// A closure that injects an interrupt to the specified vCPUs.
+pub type InterruptInjector<U: VCpuInfo> =
+    dyn FnMut(CpuMask<{ MAX_VCPU_NUM }>, usize) -> AxResult<()>;
