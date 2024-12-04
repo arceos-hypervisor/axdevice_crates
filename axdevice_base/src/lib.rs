@@ -13,16 +13,14 @@
 extern crate alloc;
 
 use alloc::{boxed::Box, string::String, vec::Vec};
-use axaddrspace::GuestPhysAddrRange;
+use axaddrspace::{device::{DeviceAddrRange, PortRange, SysRegAddrRange}, GuestPhysAddrRange};
 use axerrno::AxResult;
 use cpumask::CpuMask;
 
-mod device_addr;
 // TODO: support vgicv2
 // pub(crate) mod emu_vgicdv2;
 mod emu_type;
 
-pub use device_addr::*;
 // pub use emu_config_notuse::EmulatedDeviceConfig;
 pub use emu_type::EmuDeviceType;
 
@@ -68,6 +66,9 @@ pub trait BaseMmioDeviceOps<U: VCpuInfo> = BaseDeviceOps<GuestPhysAddrRange, U>;
 /// [`BaseSysRegDeviceOps`] is the trait that all emulated system register devices must implement.
 /// It is a trait alias of [`BaseDeviceOps`] with [`SysRegAddrRange`] as the address range.
 pub trait BaseSysRegDeviceOps<U: VCpuInfo> = BaseDeviceOps<SysRegAddrRange, U>;
+/// [`BasePortDeviceOps`] is the trait that all emulated port devices must implement.
+/// It is a trait alias of [`BaseDeviceOps`] with [`PortRange`] as the address range.
+pub trait BasePortDeviceOps<U: VCpuInfo> = BaseDeviceOps<PortRange, U>;
 
 /// The maximum number of vCPUs supported.
 pub const MAX_VCPU_NUM: usize = 64;
