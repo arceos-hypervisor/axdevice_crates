@@ -30,6 +30,7 @@ pub struct SysRegAddr(pub usize); // u32 seems to be enough, but we use usize fo
 impl DeviceAddr for SysRegAddr {}
 
 /// A range of system register addresses.
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub struct SysRegAddrRange {
     pub start: SysRegAddr,
     pub end: SysRegAddr,
