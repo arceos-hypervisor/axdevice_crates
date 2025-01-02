@@ -24,7 +24,7 @@ pub trait BaseDeviceOps {
     /// Returns the address range of the emulated device.
     fn address_range(&self) -> AddrRange<GuestPhysAddr>;
     /// Handles a read operation on the emulated device.
-    fn handle_read(&self, addr: GuestPhysAddr, width: usize) -> AxResult<usize>;
+    fn handle_read(&self, addr: GuestPhysAddr, width: usize, vcpu_id: usize) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
-    fn handle_write(&self, addr: GuestPhysAddr, width: usize, val: usize);
+    fn handle_write(&self, addr: GuestPhysAddr, width: usize, val: usize, vcpu_id: usize);
 }
