@@ -8,6 +8,8 @@
 
 extern crate alloc;
 
+use alloc::sync::Arc;
+
 use memory_addr::AddrRange;
 
 use axaddrspace::GuestPhysAddr;
@@ -23,6 +25,8 @@ pub trait BaseDeviceOps {
     fn emu_type(&self) -> EmuDeviceType;
     /// Returns the address range of the emulated device.
     fn address_range(&self) -> AddrRange<GuestPhysAddr>;
+    /// Converts the emulated device into a `dyn Any` trait object.
+    fn into_any(self: Arc<Self>) -> Arc<dyn core::any::Any + Send + Sync>;
     /// Handles a read operation on the emulated device.
     fn handle_read(&self, addr: GuestPhysAddr, width: usize) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
