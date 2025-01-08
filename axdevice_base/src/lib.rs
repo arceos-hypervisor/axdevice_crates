@@ -7,7 +7,6 @@
 //!
 //! This crate contains:
 //! [`BaseDeviceOps`] trait: The trait that all emulated devices must implement.
-//! [`EmulatedDeviceConfig`] struct: Represents the configuration of an emulated device for a virtual machine.
 //! [`EmuDeviceType`] enum: Enumeration representing the type of emulator devices.
 
 extern crate alloc;
@@ -20,8 +19,9 @@ use axaddrspace::{
 use axerrno::AxResult;
 use cpumask::CpuMask;
 
-// TODO: support vgicv2
-// pub(crate) mod emu_vgicdv2;
+use axaddrspace::GuestPhysAddr;
+use axerrno::AxResult;
+
 mod emu_type;
 
 // pub use emu_config_notuse::EmulatedDeviceConfig;
