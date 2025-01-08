@@ -19,9 +19,6 @@ use axaddrspace::{
 use axerrno::AxResult;
 use cpumask::CpuMask;
 
-use axaddrspace::GuestPhysAddr;
-use axerrno::AxResult;
-
 mod emu_type;
 
 // pub use emu_config_notuse::EmulatedDeviceConfig;
