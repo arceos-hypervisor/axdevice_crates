@@ -24,7 +24,25 @@ pub trait BaseDeviceOps {
     /// Returns the address range of the emulated device.
     fn address_range(&self) -> AddrRange<GuestPhysAddr>;
     /// Handles a read operation on the emulated device.
-    fn handle_read(&self, addr: GuestPhysAddr, width: usize) -> AxResult<usize>;
+    fn handle_read(&self, addr: GuestPhysAddr, width: usize, vcpu: &dyn VCpuIf) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
-    fn handle_write(&self, addr: GuestPhysAddr, width: usize, val: usize);
+    fn handle_write(&self, addr: GuestPhysAddr, width: usize, val: usize, vcpu: &dyn VCpuIf);
+}
+
+/// A trait representing a virtual CPU interface.
+///
+/// This trait defines the basic operations that can be performed on a virtual CPU.
+pub trait VCpuIf {
+    /// Returns the ID of the virtual CPU.
+    ///
+    /// # Returns
+    /// * `usize` - The ID of the virtual CPU.
+    fn vcpu_id(&self) -> usize;
+
+    /// Sets the value of a general-purpose register.
+    ///
+    /// # Arguments
+    /// * `reg` - The index of the register to set.
+    /// * `val` - The value to set the register to.
+    fn set_gpr(&self, reg: usize, val: usize);
 }
