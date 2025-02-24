@@ -22,6 +22,7 @@ use cpumask::CpuMask;
 
 // TODO: support vgicv2
 // pub(crate) mod emu_vgicdv2;
+// pub mod api;
 mod emu_type;
 
 // pub use emu_config_notuse::EmulatedDeviceConfig;
@@ -78,7 +79,7 @@ pub trait BaseDeviceOps<R: DeviceAddrRange> {
         context: DeviceRWContext,
     ) -> AxResult;
     /// Sets the interrupt injector for the emulated device.
-    fn set_interrupt_injector(&mut self, injector: Box<InterruptInjector>);
+    fn set_interrupt_injector(&self, injector: Box<InterruptInjector>);
 }
 
 // trait aliases are limited yet: https://github.com/rust-lang/rfcs/pull/3437
@@ -97,3 +98,14 @@ pub const MAX_VCPU_NUM: usize = 64;
 
 /// A closure that injects an interrupt to the specified vCPUs.
 pub type InterruptInjector = dyn FnMut(CpuMask<{ MAX_VCPU_NUM }>, usize) -> AxResult<()>;
+
+pub trait InterruptInjectorTrait = FnMut(CpuMask<{ MAX_VCPU_NUM }>, usize) -> AxResult<()>;
+
+#[doc(hidden)]
+fn __injector_type_def_consistency_check() {
+    fn get_injector() -> impl InterruptInjectorTrait {
+        |_: CpuMask<{ MAX_VCPU_NUM }>, _: usize| Ok(())
+    }
+    let _injector  = get_injector();
+    let _injector: Box<InterruptInjector> = Box::new(_injector);
+}
