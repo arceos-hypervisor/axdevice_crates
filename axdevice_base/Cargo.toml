@@ -9,6 +9,7 @@ repository.workspace = true
 
 [dependencies]
 cfg-if = "1.0"
+crate_interface = "1"
 serde = { version = "1.0.204", default-features = false, features = ["derive", "alloc"] }
 # System independent crates provided by ArceOS.
 axerrno = "0.1.0"

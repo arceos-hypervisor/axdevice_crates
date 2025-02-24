@@ -22,7 +22,7 @@ use cpumask::CpuMask;
 
 // TODO: support vgicv2
 // pub(crate) mod emu_vgicdv2;
-// pub mod api;
+pub mod api;
 mod emu_type;
 
 // pub use emu_config_notuse::EmulatedDeviceConfig;
@@ -106,6 +106,6 @@ fn __injector_type_def_consistency_check() {
     fn get_injector() -> impl InterruptInjectorTrait {
         |_: CpuMask<{ MAX_VCPU_NUM }>, _: usize| Ok(())
     }
-    let _injector  = get_injector();
+    let _injector = get_injector();
     let _injector: Box<InterruptInjector> = Box::new(_injector);
 }
