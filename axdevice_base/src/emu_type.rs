@@ -5,8 +5,8 @@ use core::fmt::{Display, Formatter};
 pub enum EmuDeviceType {
     /// Console device.
     EmuDeviceTConsole = 0,
-    /// ARM interrupt controller V2 device.
-    EmuDeviceTGicdV2 = 1,
+    /// Interrupt controller device, e.g. vGICv2 in aarch64, vLAPIC in x86.
+    EmuDeviceTInterruptController = 1,
     /// Partial passthrough interrupt controller device.
     EmuDeviceTGPPT = 2,
     /// Virtio block device.
@@ -32,7 +32,7 @@ impl Display for EmuDeviceType {
     fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         match self {
             EmuDeviceType::EmuDeviceTConsole => write!(f, "console"),
-            EmuDeviceType::EmuDeviceTGicdV2 => write!(f, "Arm interrupt controller V2"),
+            EmuDeviceType::EmuDeviceTInterruptController => write!(f, "Interrupt controller"),
             EmuDeviceType::EmuDeviceTGPPT => write!(f, "partial passthrough interrupt controller"),
             EmuDeviceType::EmuDeviceTVirtioBlk => write!(f, "virtio block"),
             EmuDeviceType::EmuDeviceTVirtioNet => write!(f, "virtio net"),
@@ -52,7 +52,7 @@ impl EmuDeviceType {
     pub fn removable(&self) -> bool {
         matches!(
             *self,
-            EmuDeviceType::EmuDeviceTGicdV2
+            EmuDeviceType::EmuDeviceTInterruptController
                 | EmuDeviceType::EmuDeviceTSGIR
                 | EmuDeviceType::EmuDeviceTICCSRE
                 | EmuDeviceType::EmuDeviceTGPPT
@@ -67,7 +67,7 @@ impl EmuDeviceType {
     pub fn from_usize(value: usize) -> EmuDeviceType {
         match value {
             0 => EmuDeviceType::EmuDeviceTConsole,
-            1 => EmuDeviceType::EmuDeviceTGicdV2,
+            1 => EmuDeviceType::EmuDeviceTInterruptController,
             2 => EmuDeviceType::EmuDeviceTGPPT,
             3 => EmuDeviceType::EmuDeviceTVirtioBlk,
             4 => EmuDeviceType::EmuDeviceTVirtioNet,
