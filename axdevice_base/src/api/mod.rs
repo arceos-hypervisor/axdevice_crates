@@ -1,6 +1,4 @@
 mod macro_def;
-use alloc::boxed::Box;
-use memory_addr::PhysAddr;
 use macro_def::def_device_api;
 
 pub use paste::paste as __paste;
@@ -38,6 +36,15 @@ pub mod timer {
             fn ticks_to_time(cycles: u64) -> TimeValue;
             /// Convert time to cycles
             fn time_to_ticks(time: TimeValue) -> u64;
+        }
+    }
+}
+
+/// Interrupt API
+pub mod interrupt {
+    super::def_device_api! {
+        interrupt {
+            fn inject_interrupt(vm_id: u32, vcpu_id: u32, vector: u8);
         }
     }
 }
