@@ -21,7 +21,6 @@ use cpumask::CpuMask;
 
 // TODO: support vgicv2
 // pub(crate) mod emu_vgicdv2;
-pub mod api;
 mod emu_type;
 
 // pub use emu_config_notuse::EmulatedDeviceConfig;
