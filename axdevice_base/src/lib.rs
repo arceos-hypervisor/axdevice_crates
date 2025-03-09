@@ -13,8 +13,8 @@ extern crate alloc;
 
 use alloc::{boxed::Box, string::String, vec::Vec};
 use axaddrspace::{
-    device::{AccessWidth, DeviceAddrRange, PortRange, SysRegAddrRange},
     GuestPhysAddrRange,
+    device::{AccessWidth, DeviceAddrRange, PortRange, SysRegAddrRange},
 };
 use axerrno::AxResult;
 use cpumask::CpuMask;
