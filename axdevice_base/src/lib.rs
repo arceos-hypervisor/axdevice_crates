@@ -43,18 +43,6 @@ pub struct EmulatedDeviceConfig {
     pub cfg_list: Vec<usize>,
 }
 
-/// Represents the context of a device read/write operation.
-pub struct DeviceRWContext {
-    pub vcpu_id: usize,
-}
-
-impl DeviceRWContext {
-    /// Creates a new `DeviceRWContext` with the specified vCPU ID.
-    pub fn new(vcpu_id: usize) -> Self {
-        Self { vcpu_id }
-    }
-}
-
 /// [`BaseDeviceOps`] is the trait that all emulated devices must implement.
 pub trait BaseDeviceOps<R: DeviceAddrRange> {
     /// Returns the type of the emulated device.
@@ -66,7 +54,6 @@ pub trait BaseDeviceOps<R: DeviceAddrRange> {
         &self,
         addr: R::Addr,
         width: AccessWidth,
-        context: DeviceRWContext,
     ) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
     fn handle_write(
@@ -74,7 +61,6 @@ pub trait BaseDeviceOps<R: DeviceAddrRange> {
         addr: R::Addr,
         width: AccessWidth,
         val: usize,
-        context: DeviceRWContext,
     ) -> AxResult;
     /// Sets the interrupt injector for the emulated device.
     fn set_interrupt_injector(&self, injector: Box<InterruptInjector>);
