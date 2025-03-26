@@ -17,7 +17,6 @@ use axaddrspace::{
     device::{AccessWidth, DeviceAddrRange, PortRange, SysRegAddrRange},
 };
 use axerrno::AxResult;
-use cpumask::CpuMask;
 
 // TODO: support vgicv2
 // pub(crate) mod emu_vgicdv2;
@@ -62,8 +61,6 @@ pub trait BaseDeviceOps<R: DeviceAddrRange> {
         width: AccessWidth,
         val: usize,
     ) -> AxResult;
-    /// Sets the interrupt injector for the emulated device.
-    fn set_interrupt_injector(&self, injector: Box<InterruptInjector>);
 }
 
 // trait aliases are limited yet: https://github.com/rust-lang/rfcs/pull/3437
@@ -76,20 +73,3 @@ pub trait BaseSysRegDeviceOps = BaseDeviceOps<SysRegAddrRange>;
 /// [`BasePortDeviceOps`] is the trait that all emulated port devices must implement.
 /// It is a trait alias of [`BaseDeviceOps`] with [`PortRange`] as the address range.
 pub trait BasePortDeviceOps = BaseDeviceOps<PortRange>;
-
-/// The maximum number of vCPUs supported.
-pub const MAX_VCPU_NUM: usize = 64;
-
-/// A closure that injects an interrupt to the specified vCPUs.
-pub type InterruptInjector = dyn FnMut(CpuMask<{ MAX_VCPU_NUM }>, usize) -> AxResult<()>;
-
-pub trait InterruptInjectorTrait = FnMut(CpuMask<{ MAX_VCPU_NUM }>, usize) -> AxResult<()>;
-
-#[doc(hidden)]
-fn __injector_type_def_consistency_check() {
-    fn get_injector() -> impl InterruptInjectorTrait {
-        |_: CpuMask<{ MAX_VCPU_NUM }>, _: usize| Ok(())
-    }
-    let _injector = get_injector();
-    let _injector: Box<InterruptInjector> = Box::new(_injector);
-}
