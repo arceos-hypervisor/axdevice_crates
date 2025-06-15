@@ -1,7 +1,8 @@
 use core::fmt::{Display, Formatter};
 
 /// Enumeration representing the type of emulator devices.
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[repr(usize)]
 pub enum EmuDeviceType {
     /// Console device.
     EmuDeviceTConsole = 0,
@@ -23,8 +24,19 @@ pub enum EmuDeviceType {
     EmuDeviceTSGIR = 8,
     /// Interrupt controller GICR device.
     EmuDeviceTGICR = 9,
+    /// A emulated device that provides Inter-VM Communication (IVC) channel.
+    /// This device is used for communication between different VMs,
+    /// the corresponding memory region of this device should be marked as `Reserved` in
+    /// device tree or ACPI table.
+    EmuDeviceTIVCChannel = 10,
     /// Meta device.
-    EmuDeviceTMeta = 10,
+    EmuDeviceTMeta = 11,
+}
+
+impl Default for EmuDeviceType {
+    fn default() -> Self {
+        Self::EmuDeviceTMeta
+    }
 }
 
 impl Display for EmuDeviceType {
@@ -33,7 +45,9 @@ impl Display for EmuDeviceType {
         match self {
             EmuDeviceType::EmuDeviceTConsole => write!(f, "console"),
             EmuDeviceType::EmuDeviceTInterruptController => write!(f, "Interrupt controller"),
-            EmuDeviceType::EmuDeviceTGPPT => write!(f, "partial passthrough interrupt controller"),
+            EmuDeviceType::EmuDeviceTGPPT => {
+                write!(f, "partial passthrough interrupt controller")
+            }
             EmuDeviceType::EmuDeviceTVirtioBlk => write!(f, "virtio block"),
             EmuDeviceType::EmuDeviceTVirtioNet => write!(f, "virtio net"),
             EmuDeviceType::EmuDeviceTVirtioConsole => write!(f, "virtio console"),
@@ -41,6 +55,7 @@ impl Display for EmuDeviceType {
             EmuDeviceType::EmuDeviceTICCSRE => write!(f, "interrupt ICC SRE"),
             EmuDeviceType::EmuDeviceTSGIR => write!(f, "interrupt ICC SGIR"),
             EmuDeviceType::EmuDeviceTGICR => write!(f, "interrupt controller gicr"),
+            EmuDeviceType::EmuDeviceTIVCChannel => write!(f, "IVC channel"),
             EmuDeviceType::EmuDeviceTMeta => write!(f, "meta device"),
         }
     }
@@ -76,7 +91,8 @@ impl EmuDeviceType {
             7 => EmuDeviceType::EmuDeviceTICCSRE,
             8 => EmuDeviceType::EmuDeviceTSGIR,
             9 => EmuDeviceType::EmuDeviceTGICR,
-            10 => EmuDeviceType::EmuDeviceTMeta,
+            10 => EmuDeviceType::EmuDeviceTIVCChannel,
+            11 => EmuDeviceType::EmuDeviceTMeta,
             _ => panic!("Unknown  EmuDeviceType value: {}", value),
         }
     }
