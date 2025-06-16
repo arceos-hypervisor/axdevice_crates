@@ -11,18 +11,15 @@
 
 extern crate alloc;
 
-use alloc::{boxed::Box, string::String, vec::Vec};
+use alloc::{string::String, vec::Vec};
 use axaddrspace::{
     GuestPhysAddrRange,
     device::{AccessWidth, DeviceAddrRange, PortRange, SysRegAddrRange},
 };
 use axerrno::AxResult;
 
-// TODO: support vgicv2
-// pub(crate) mod emu_vgicdv2;
 mod emu_type;
 
-// pub use emu_config_notuse::EmulatedDeviceConfig;
 pub use emu_type::EmuDeviceType;
 
 /// Represents the configuration of an emulated device for a virtual machine.
@@ -49,18 +46,9 @@ pub trait BaseDeviceOps<R: DeviceAddrRange> {
     /// Returns the address range of the emulated device.
     fn address_range(&self) -> R;
     /// Handles a read operation on the emulated device.
-    fn handle_read(
-        &self,
-        addr: R::Addr,
-        width: AccessWidth,
-    ) -> AxResult<usize>;
+    fn handle_read(&self, addr: R::Addr, width: AccessWidth) -> AxResult<usize>;
     /// Handles a write operation on the emulated device.
-    fn handle_write(
-        &self,
-        addr: R::Addr,
-        width: AccessWidth,
-        val: usize,
-    ) -> AxResult;
+    fn handle_write(&self, addr: R::Addr, width: AccessWidth, val: usize) -> AxResult;
 }
 
 // trait aliases are limited yet: https://github.com/rust-lang/rfcs/pull/3437
