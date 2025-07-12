@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["EmuDeviceType"],"struct":["EmulatedDeviceConfig"],"trait":["BaseDeviceOps"],"traitalias":["BaseMmioDeviceOps","BasePortDeviceOps","BaseSysRegDeviceOps"]};
