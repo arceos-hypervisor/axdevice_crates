@@ -21,7 +21,7 @@ use core::any::Any;
 
 use axaddrspace::{
     GuestPhysAddrRange,
-    device::{self, AccessWidth, DeviceAddrRange, PortRange, SysRegAddrRange},
+    device::{AccessWidth, DeviceAddrRange, PortRange, SysRegAddrRange},
 };
 use axerrno::AxResult;
 
