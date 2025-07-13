@@ -1,9 +1,9 @@
-use alloc::{sync::Arc, vec::Vec};
 use alloc::vec;
-use axaddrspace::{device::AccessWidth, GuestPhysAddr, GuestPhysAddrRange};
+use alloc::{sync::Arc, vec::Vec};
+use axaddrspace::{GuestPhysAddr, GuestPhysAddrRange, device::AccessWidth};
 use axerrno::AxResult;
 
-use crate::{map_device_of_type, BaseDeviceOps, EmuDeviceType};
+use crate::{BaseDeviceOps, EmuDeviceType, map_device_of_type};
 
 const DEVICE_A_TEST_METHOD_ANSWER: usize = 42;
 
@@ -56,14 +56,15 @@ impl BaseDeviceOps<GuestPhysAddrRange> for DeviceB {
 
 #[test]
 fn test_device_type_test() {
-    let devices: Vec<Arc<dyn BaseDeviceOps<GuestPhysAddrRange>>> = vec![
-        Arc::new(DeviceA),
-        Arc::new(DeviceB),
-    ];
+    let devices: Vec<Arc<dyn BaseDeviceOps<GuestPhysAddrRange>>> =
+        vec![Arc::new(DeviceA), Arc::new(DeviceB)];
 
     let mut device_a_found = false;
     for device in devices {
-        assert_eq!(device.handle_read(0x2000.into(), AccessWidth::Byte), Ok(0x2000));
+        assert_eq!(
+            device.handle_read(0x2000.into(), AccessWidth::Byte),
+            Ok(0x2000)
+        );
 
         if let Some(answer) = map_device_of_type(&device, |d: &DeviceA| d.test_method()) {
             assert_eq!(answer, DEVICE_A_TEST_METHOD_ANSWER);
